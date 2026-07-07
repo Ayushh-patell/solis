@@ -5,6 +5,8 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import android.provider.MediaStore
+import android.util.Log
 
 class NativeMediaStoreModule(
     reactContext: ReactApplicationContext
@@ -15,36 +17,40 @@ class NativeMediaStoreModule(
     }
 
     override fun getMedia(options: ReadableMap, promise: Promise) {
-        val media = Arguments.createArray()
+        Log.e(
+    "SOLIS",
+    "limit=${if (options.hasKey("limit")) options.getInt("limit") else "missing"} " +
+    "offset=${if (options.hasKey("offset")) options.getInt("offset") else "missing"}"
+)
+        try {
+            val media = Arguments.createArray()
+            val queryStart = System.currentTimeMillis()
 
-        val item = Arguments.createMap()
+            val cursors = queryMedia(
+                reactApplicationContext.contentResolver,
+                getVolumes(reactApplicationContext),
+                options
+            )
+            Log.e("SOLIS", "Query setup: ${System.currentTimeMillis() - queryStart} ms")
+            val mapStart = System.currentTimeMillis()
 
-        item.putString("id", "1")
-        item.putString("uri", "hello")
-        item.putString("thumbnailUri", "hello")
+            cursors.forEach { cursor ->
+                cursor.use {
+                    val columns = getMediaColumns(it)
 
-        item.putString("type", "image")
+                    while (it.moveToNext()) {
+                        media.pushMap(cursorToMedia(it, columns))
+                    }
+                }
+            }
+            Log.e("SOLIS", "Cursor mapping: ${System.currentTimeMillis() - mapStart} ms")
+            Log.e("SOLIS", "Total media = ${media.size()}")
+            promise.resolve(media)
 
-        item.putString("album", "Camera")
-        item.putString("albumId", "camera")
 
-        item.putString("name", "Hello.jpg")
-        item.putString("mimeType", "image/jpeg")
-
-        item.putString("dateTaken", "2026-01-01T00:00:00")
-        item.putString("dateModified", "2026-01-01T00:00:00")
-
-        item.putInt("width", 100)
-        item.putInt("height", 100)
-        item.putDouble("size", 1000.0)
-
-        item.putNull("duration")
-
-        item.putBoolean("favorite", false)
-
-        media.pushMap(item)
-
-        promise.resolve(media)
+        } catch (e: Exception) {
+            promise.reject("MEDIA_QUERY_FAILED", e)
+        }
     }
 
     override fun getAlbums(promise: Promise) {

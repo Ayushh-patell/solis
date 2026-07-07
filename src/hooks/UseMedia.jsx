@@ -5,8 +5,9 @@ import MediaService from '../services/media/MediaServices';
 import groupMediaByDate from '../utils/media/GroupMediabyDate';
 import createGridRows from '../utils/media/CreateGridRow';
 import flattenGridSections from '../utils/media/FlattenGridSections';
+const DEFAULT_OPTIONS = Object.freeze({});
 
-export default function useMedia(options = {}) {
+export default function useMedia(options = DEFAULT_OPTIONS) {
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -15,8 +16,10 @@ export default function useMedia(options = {}) {
   const loadMedia = useCallback(async () => {
     try {
       setError(null);
-
+const nativeStart = Date.now();
+      console.log(options)
       const result = await MediaService.getMedia(options);
+    console.log(`Native: ${Date.now() - nativeStart}ms`);
 
       setMedia(result);
     } catch (err) {
@@ -36,12 +39,21 @@ export default function useMedia(options = {}) {
     loadMedia();
   }, [loadMedia]);
 
-  const items = useMemo(() => {
-    const sections = groupMediaByDate(media);
-    const sections_with_rows = createGridRows(sections, options.columns ?? 3);
+const items = useMemo(() => {
+  let start = Date.now();
+  const sections = groupMediaByDate(media);
+  console.log(`Grouping: ${Date.now() - start}ms`);
 
-    return flattenGridSections(sections_with_rows);
-  }, [media, options.columns]);
+  start = Date.now();
+  const sectionsWithRows = createGridRows(sections, options.columns ?? 3);
+  console.log(`Rows: ${Date.now() - start}ms`);
+
+  start = Date.now();
+  const flattened = flattenGridSections(sectionsWithRows);
+  console.log(`Flatten: ${Date.now() - start}ms`);
+
+  return flattened;
+}, [media, options.columns]);
 
   return {
     media,

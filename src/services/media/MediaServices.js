@@ -90,125 +90,31 @@ const mockMedia = [
   },
 ];
 
-console.log(NativeMediaStore);
 
-const delay = (ms = 400) => new Promise(resolve => setTimeout(resolve, ms));
 
 const MediaService = {
-  async getMedia({
-    album = null,
-    type = 'all',
-    sortBy = 'dateTaken',
-    order = 'desc',
-    limit = 100,
-    offset = 0,
-  } = {}) {
-    await delay();
-    const mediaMock = await NativeMediaStore.getMedia({});
-
-
-    let media = [...mediaMock];
-
-    // Filter by album
-    if (album) {
-      media = media.filter(item => item.album === album);
-    }
-
-    // Filter by media type
-    if (type !== 'all') {
-      media = media.filter(item => item.type === type);
-    }
-
-    // Sort
-    media.sort((a, b) => {
-      let comparison = 0;
-
-      switch (sortBy) {
-        case 'name':
-          comparison = a.name.localeCompare(b.name);
-          break;
-
-        case 'size':
-          comparison = a.size - b.size;
-          break;
-
-        case 'width':
-          comparison = a.width - b.width;
-          break;
-
-        case 'height':
-          comparison = a.height - b.height;
-          break;
-
-        case 'dateModified':
-          comparison =
-            new Date(a.dateModified).getTime() -
-            new Date(b.dateModified).getTime();
-          break;
-
-        case 'dateTaken':
-        default:
-          comparison =
-            new Date(a.dateTaken).getTime() -
-            new Date(b.dateTaken).getTime();
-          break;
-      }
-
-      return order === 'asc' ? comparison : -comparison;
-    });
-
-    // Pagination
-    return media.slice(offset, offset + limit);
+  async getMedia(options = {}) {
+    return NativeMediaStore.getMedia(options);
   },
 
   async getAlbums() {
-    await delay();
-
-    const albums = [...new Set(mockMedia.map(item => item.album))];
-
-    return albums.map(name => ({
-      id: name.toLowerCase().replace(/\s+/g, '-'),
-      name,
-      count: mockMedia.filter(item => item.album === name).length,
-      cover: mockMedia.find(item => item.album === name)?.thumbnailUri,
-    }));
+    return NativeMediaStore.getAlbums();
   },
 
   async getMediaByAlbum(album) {
-    return this.getMedia({ album });
+    return NativeMediaStore.getMedia({ album });
   },
 
   async deleteMedia(ids) {
-    await delay();
-
-    console.log('Mock delete:', ids);
-
-    return {
-      success: true,
-      affected: ids.length,
-    };
+    return NativeMediaStore.deleteMedia(ids);
   },
 
   async moveMedia(ids, destinationAlbum) {
-    await delay();
-
-    console.log('Mock move:', ids, destinationAlbum);
-
-    return {
-      success: true,
-      affected: ids.length,
-    };
+    return NativeMediaStore.moveMedia(ids, destinationAlbum);
   },
 
   async copyMedia(ids, destinationAlbum) {
-    await delay();
-
-    console.log('Mock copy:', ids, destinationAlbum);
-
-    return {
-      success: true,
-      affected: ids.length,
-    };
+    return NativeMediaStore.copyMedia(ids, destinationAlbum);
   },
 };
 

@@ -3,17 +3,48 @@ import { StyleSheet, Text, View } from 'react-native';
 import useMedia from '../hooks/UseMedia';
 import MediaGrid from '../components/media/MediaGrid/'
 import { colors, fontSize, fontFamily } from '../theme';
+import { useMemo } from 'react';
 
 
 
 export default function HomeScreen() {
-
+  const mediaOptions = useMemo(
+    () => ({
+      limit: 300,
+      offset: 0,
+    }),
+    []
+  );
+  
   const {
   items,
   loading,
   refreshing,
   refresh,
-} = useMedia();
+  error,
+} = useMedia(mediaOptions);
+const totalRows = items.reduce((total, item) => {
+  if (item.type === "header") {
+    return total + item.section.rows.length;
+  }
+
+  return total;
+}, 0);
+
+const totalMedia = items.reduce((total, item) => {
+  if (item.type === "header") {
+    return total + item.section.items.length;
+  }
+
+  return total;
+}, 0);
+
+console.log({
+  flatItems: items.length,
+  rows: totalRows,
+  media: totalMedia,
+  error,
+});
 
   return (
     <View style={styles.container}>

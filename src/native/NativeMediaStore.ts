@@ -14,13 +14,17 @@ export type Media = {
   name: string;
   mimeType: string;
 
-  dateTaken: string;
-  dateModified: string;
+  /** Unix timestamp (milliseconds) */
+  dateTaken: number;
+
+  /** Unix timestamp (seconds from MediaStore, see note below) */
+  dateModified: number;
 
   width: number;
   height: number;
   size: number;
 
+  /** Duration in milliseconds (videos only) */
   duration?: number;
 
   favorite: boolean;
@@ -73,5 +77,4 @@ export interface Spec extends TurboModule {
   ): Promise<AffectedResponse>;
 }
 
-// export default TurboModuleRegistry.getEnforcing<Spec>('NativeMediaStore');
 export default TurboModuleRegistry.get<Spec>('NativeMediaStore');
