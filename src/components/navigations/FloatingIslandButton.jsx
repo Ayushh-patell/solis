@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from '@react-native-vector-icons/material-design-icons';
 
 import { colors, fontSize, fontFamily } from '../../theme';
 
@@ -10,6 +10,8 @@ export default function FloatingIslandButton({
   active = false,
   onPress,
 }) {
+
+  console.log(icon)
   return (
     <Pressable
       onPress={onPress}
@@ -24,7 +26,7 @@ export default function FloatingIslandButton({
         pressed && styles.pressed,
       ]}
     >
-      <Icon
+      <MaterialIcons
         name={icon}
         size={22}
         color={active ? colors.primary : 'rgba(255,255,255,0.65)'}

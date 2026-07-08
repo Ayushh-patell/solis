@@ -6,8 +6,10 @@ import { colors, fontSize, fontFamily } from '../theme';
 import { useMemo } from 'react';
 import FloatingIsland from '../components/navigations/FloatingIsland'
 import { navigationItems } from '../constants/Navigations';
+import {useNavigation} from '@react-navigation/native'
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
   const mediaOptions = useMemo(
     () => ({
       limit: 300,

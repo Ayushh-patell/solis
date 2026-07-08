@@ -16,12 +16,13 @@ class NativeMediaStoreModule(
         const val NAME = NativeMediaStoreSpec.NAME
     }
 
+
     override fun getMedia(options: ReadableMap, promise: Promise) {
         Log.e(
-    "SOLIS",
-    "limit=${if (options.hasKey("limit")) options.getInt("limit") else "missing"} " +
-    "offset=${if (options.hasKey("offset")) options.getInt("offset") else "missing"}"
-)
+            "SOLIS",
+            "limit=${if (options.hasKey("limit")) options.getInt("limit") else "missing"} " +
+                    "offset=${if (options.hasKey("offset")) options.getInt("offset") else "missing"}"
+        )
         try {
             val media = Arguments.createArray()
             val queryStart = System.currentTimeMillis()
@@ -53,9 +54,25 @@ class NativeMediaStoreModule(
         }
     }
 
-    override fun getAlbums(promise: Promise) {
-        promise.resolve(Arguments.createArray())
+override fun getAlbums(promise: Promise) {
+    try {
+        val contentResolver = reactApplicationContext.contentResolver
+        val volumes = getVolumes(reactApplicationContext)
+
+        val albums = queryAlbums(contentResolver, volumes)
+            .flatMap { cursor ->
+                cursor.use {
+                    cursorToAlbums(it)
+                }
+            }
+
+        Log.d("SOLIS", albums.toString())
+
+        promise.resolve(mapAlbums(albums))
+    } catch (e: Exception) {
+        promise.reject("GET_ALBUMS_ERROR", e)
     }
+}
 
     override fun getMediaByAlbum(album: String, promise: Promise) {
         promise.resolve(Arguments.createArray())

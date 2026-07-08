@@ -2,26 +2,26 @@ export const navigationItems = [
   {
     key: 'Home',
     label: 'Gallery',
-    icon: 'photo',
+    icon: 'image',
   },
   {
     key: 'Albums',
     label: 'Albums',
-    icon: 'photo-library',
+    icon: 'folder-multiple-image',
   },
   {
     key: 'search',
     label: 'Search',
-    icon: 'search',
+    icon: 'magnify',
   },
   {
     key: 'favorites',
     label: 'Favorites',
-    icon: 'favorite-border',
+    icon: 'heart-outline',
   },
   {
     key: 'settings',
     label: 'Settings',
-    icon: 'settings',
+    icon: 'cog-outline',
   },
 ];

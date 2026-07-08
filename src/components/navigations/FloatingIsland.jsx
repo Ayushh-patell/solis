@@ -17,6 +17,7 @@ export default function FloatingIsland({
         {items.map(item => (
           <FloatingIslandButton
             key={item.key}
+            link={item.key}
             icon={item.icon}
             label={item.label}
             active={activeKey === item.key}
