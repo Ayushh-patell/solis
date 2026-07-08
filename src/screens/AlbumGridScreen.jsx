@@ -24,7 +24,7 @@ export default function AlbumGridScreen() {
     error,
   } = useAlbums();
 
-  console.log(error, albums, "album grid")
+  console.log(error, "album grid")
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.album}>
