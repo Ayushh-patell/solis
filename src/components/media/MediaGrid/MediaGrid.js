@@ -21,14 +21,12 @@ export default function MediaGrid({
 
   onRefresh,
   onEndReached,
+  loadingMore,
 
   ListHeaderComponent,
-  ListFooterComponent,
+
   ListEmptyComponent,
 }) {
-
-
-
   const renderItem = useCallback(
     ({ item }) => {
       switch (item.type) {
@@ -52,13 +50,7 @@ export default function MediaGrid({
           return null;
       }
     },
-    [
-      columns,
-      onLongPress,
-      onPress,
-      selectedIds,
-      selectionActive,
-    ]
+    [columns, onLongPress, onPress, selectedIds, selectionActive],
   );
 
   if (loading) {
@@ -80,9 +72,9 @@ export default function MediaGrid({
       onRefresh={onRefresh}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
-      showsVerticalScrollIndicator={false}
+      showsVerticalScrollIndicator={true}
       ListHeaderComponent={ListHeaderComponent}
-      ListFooterComponent={ListFooterComponent}
+      ListFooterComponent={loadingMore ? <ActivityIndicator /> : null}
       ListEmptyComponent={ListEmptyComponent}
     />
   );
