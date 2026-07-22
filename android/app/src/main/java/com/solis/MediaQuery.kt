@@ -110,6 +110,8 @@ private fun buildSelection(
 
     if (options.hasKey("type") && !options.isNull("type")) {
         conditions += "${MediaStore.Files.FileColumns.MEDIA_TYPE} = ?"
+    } else {
+        conditions += "(${MediaStore.Files.FileColumns.MEDIA_TYPE} = ? OR ${MediaStore.Files.FileColumns.MEDIA_TYPE} = ?)"
     }
 
     return conditions
@@ -135,6 +137,9 @@ private fun buildSelectionArgs(
             "video" ->
                 args += MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
         }
+    } else {
+        args += MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
+        args += MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
     }
 
     return args

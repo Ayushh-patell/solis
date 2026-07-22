@@ -2,16 +2,20 @@ import React from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
 
 import FloatingIsland from '../components/navigations/FloatingIsland';
 import { navigationItems } from '../constants/Navigations';
 import useAlbums from '../hooks/UseAlbums';
+import FastImage from 'react-native-fast-image';
+
 
 export default function AlbumGridScreen() {
   const navigation = useNavigation();
@@ -26,11 +30,26 @@ export default function AlbumGridScreen() {
 
   console.log(error, "album grid")
 
+  const handleAlbumNavigation = (album) => {
+    navigation.navigate('AlbumView', {
+      album: album,
+    });
+  }
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.album}>
+    <Pressable style={styles.album} onPress={() =>handleAlbumNavigation(item)}
+      android_ripple={{
+        color: 'rgba(255,255,255,0.08)',
+        borderless: true,
+        radius: 300,
+      }}>
       <Text style={styles.title}>{item.name}</Text>
+      <FastImage
+        key={item.id}
+        source={{ uri: item.coverUri }}
+        style={styles.image}
+      />
       <Text style={styles.count}>{item.count} items</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 
   return (
@@ -61,6 +80,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+
+  image: {
+    flex: 1,
+    aspectRatio: 1,
   },
 
   list: {

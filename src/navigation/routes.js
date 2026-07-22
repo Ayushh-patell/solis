@@ -4,6 +4,7 @@ export const ROUTES = {
 
   HOME: 'Home',
   ALBUMS: 'Albums',
+  ALBUMVIEW: 'AlbumView',
   VIEWER: 'Viewer',
   SEARCH: 'Search',
   FAVORITES: 'Favorites',

@@ -18,8 +18,7 @@ export default function HomeScreen() {
     [],
   );
 
-  const { items, loading, refreshing, refresh, error, loadMore, loadingMore } =
-    useMedia(mediaOptions);
+  const { items, loading, refreshing, refresh, error, loadMore, loadingMore } = useMedia(mediaOptions);
   const totalRows = items.reduce((total, item) => {
     if (item.type === 'header') {
       return total + item.section.rows.length;

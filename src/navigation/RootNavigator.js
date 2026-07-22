@@ -5,6 +5,7 @@ import SplashScreen from '../screens/SplashScreen';
 import PermissionScreen from '../screens/PermissionsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import AlbumGridScreen from '../screens/AlbumGridScreen';
+import AlbumViewScreen from '../screens/AlbumViewScreen';
 import ViewerScreen from '../screens/MediaViewerScreen';
 
 
@@ -37,6 +38,11 @@ export default function RootNavigator() {
       <Stack.Screen
         name={ROUTES.ALBUMS}
         component={AlbumGridScreen}
+      />
+
+      <Stack.Screen
+        name={ROUTES.ALBUMVIEW}
+        component={AlbumViewScreen}
       />
 
       <Stack.Screen

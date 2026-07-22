@@ -20,11 +20,24 @@ fun queryAlbums(
 
         val uri = MediaStore.Files.getContentUri(volume)
 
+        val selection = """
+                        (
+                        ${MediaStore.Files.FileColumns.MEDIA_TYPE} = ?
+                        OR
+                        ${MediaStore.Files.FileColumns.MEDIA_TYPE} = ?
+                        )
+                        """.trimIndent()
+
+        val selectionArgs = arrayOf(
+            MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
+            MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(),
+        )
+
         contentResolver.query(
             uri,
             ALBUM_PROJECTION,
-            null,
-            null,
+            selection,
+            selectionArgs,
             "${MediaStore.MediaColumns.DATE_TAKEN} DESC"
         )
     }

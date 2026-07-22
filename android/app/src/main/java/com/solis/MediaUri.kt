@@ -3,6 +3,8 @@ package com.solis
 import android.content.ContentUris
 import android.provider.MediaStore
 
+private const val THUMBNAIL_SIZE = 350
+
 fun getMediaUri(
     id: Long,
     mediaType: Int,
@@ -34,4 +36,10 @@ fun getThumbnailUri(
         id = id,
         mediaType = mediaType,
     )
+
+   // val bitmap = contentResolver.loadThumbnail(
+   //     uri,
+   //     Size(THUMBNAIL_SIZE, THUMBNAIL_SIZE),
+   //     null
+   // )
 }

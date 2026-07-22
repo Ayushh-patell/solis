@@ -1,10 +1,49 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  StatusBar,
+} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import Video from 'react-native-video';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function ViewerScreen() {
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  const { media } = route.params;
+
+  const isVideo =
+    media.type?.startsWith('video') ||
+    media.mimeType?.startsWith('video');
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Media Viewer</Text>
+      <StatusBar hidden />
+
+      <TouchableOpacity
+        style={styles.container}
+        activeOpacity={1}
+        // onPress={() => navigation.goBack()}
+      >
+        {isVideo ? (
+          <Video
+            source={{ uri: media.uri }}
+            style={styles.media}
+            controls
+            resizeMode="contain"
+            paused={false}
+          />
+        ) : (
+          <FastImage
+            source={{ uri: media.uri }}
+            style={styles.media}
+            resizeMode={FastImage.resizeMode.contain}
+          />
+        )}
+      </TouchableOpacity>
     </View>
   );
 }
@@ -12,12 +51,12 @@ export default function ViewerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#000',
   },
-  text: {
-    fontSize: 20,
-    fontWeight: 'bold',
+
+  media: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
 });
